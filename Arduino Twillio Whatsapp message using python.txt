@@ -1,0 +1,27 @@
+#this program send data to twillo server to receive in whats app
+#vettri vel mahendran 29 march 2019
+
+from twilio.rest import Client
+import serial
+import time
+ser = serial.Serial('COM6', 9600)
+
+
+# Your Account Sid and Auth Token from twilio.com/console
+account_sid = 'AC849a193c0773128d1ecc40fa03bd6749'
+auth_token = '5629459b7ed1e3b0691695549ce6cb6d'
+client = Client(account_sid, auth_token)
+
+
+while True:
+    while ser.inWaiting():
+        rando = ser.readline().decode()
+        messageTosend="Alert!!! The temp is "+str(rando)+"."
+        message = client.messages.create(
+                              body=messageTosend,
+                              from_='whatsapp:+14155238886',
+                              to='whatsapp:+918825415438'
+                          )
+        time.sleep(10)
+
+print(message.sid)
